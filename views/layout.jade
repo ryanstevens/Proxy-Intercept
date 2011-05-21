@@ -1,0 +1,9 @@
+!!! 5
+html(lang="en")
+    head
+        title Proxy Intercept
+        script(src="/socket.io/socket.io.js", type="application/javascript")
+        script(src="/javascripts/proxyClient.js", type="application/javascript")
+        link(rel='stylesheet', href='/stylesheets/styles.css')
+    body
+        div#wrapper!= body

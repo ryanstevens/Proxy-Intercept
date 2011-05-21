@@ -1,0 +1,45 @@
+html {
+        height: 100%;
+}
+
+body {
+    margin: 0px;
+    height: 100%;
+}
+
+#wrapper {
+    padding: 0px;
+    height: 100%;
+    background-color:#aaaaaa;;
+}
+
+h1 {
+    margin: 0px;    
+    padding-top:5px;
+}
+
+#header {
+    font-family : Helvetica, sans-serif;
+    position : absolute;
+    z-index : 1;
+    top : 0px;
+    left : 0px;
+    width: 100%;
+    padding: 0px 15px;
+    background-color:#666;
+
+}
+
+#content {
+    font-family : Helvetica, sans-serif;
+    position:relative;
+    height:100%;
+    padding: 50px 15px;
+}
+
+#connections {
+    -moz-border-radius : 10px;
+    -webkit-border-radius : 10px;
+    border-radius : 10px;
+    background-color:white;
+}
