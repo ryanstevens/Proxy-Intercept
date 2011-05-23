@@ -42,4 +42,13 @@ h1 {
     -webkit-border-radius : 10px;
     border-radius : 10px;
     background-color:white;
+    padding: 8px;
+}
+
+#connectionTemplate {
+    display:none;
+}
+
+.urlResponse {
+    margin-top: 8px;
 }

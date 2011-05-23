@@ -43,18 +43,21 @@ var proxyCache = (function(){
                 id : this.getNextId(),
                 url : originalReq.url,
                 data : '',
-                headers : null
+                method: originalReq.method,
+                requestHeaders : null,
+                responseHeaders : null
             };
 
 
             this.requests.push(reqObj);
             proxyReq.on('response', function (res) {
          
-                reqObj.headers = res.headers;
+                reqObj.requestHeaders = originalReq.headers;
+                reqObj.responseHeaders = res.headers;
                 reqObj.handler = 'Get';
                 self.sendToClients(reqObj);
                 
-                if (res.headers['content-encoding'] == 'gzip'){
+                if (res.headers['content-encoding'] === 'gzip'){
                     res = gz.inflater(res);
                 }
             
@@ -77,7 +80,6 @@ var server = http.createServer(function(request, response) {
     var proxy = http.createClient(80, request.headers['host']);
 
     proxy.on('error', function(er){
-        //sys.puts('error::'+request.url+"::"+er.message);
         response.end();
     });  
 
