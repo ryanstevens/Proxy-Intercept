@@ -7,7 +7,7 @@ var gz = require('./gzip.js');
 var io = require('socket.io');
 var express = require('express');
 var ipAddr = '127.0.0.1';
-var port = 8081;
+var port = 8080;
     
 
 var proxyCache = (function(){
@@ -44,7 +44,7 @@ var proxyCache = (function(){
                 url : originalReq.url,
                 data : '',
                 method: originalReq.method,
-                requestHeaders : null,
+                requestHeaders : originalReq.headers,
                 responseHeaders : null
             };
 
@@ -52,7 +52,6 @@ var proxyCache = (function(){
             this.requests.push(reqObj);
             proxyReq.on('response', function (res) {
          
-                reqObj.requestHeaders = originalReq.headers;
                 reqObj.responseHeaders = res.headers;
                 reqObj.handler = 'Get';
                 self.sendToClients(reqObj);
