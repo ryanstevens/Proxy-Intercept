@@ -11,18 +11,18 @@ var handlers = {
     },
     
     onGet : function(res) {
-        var connTmpl = $('connectionTemplate');
-        var connDiv = $('connections');
+        if (!this.connTmpl) this.connTmpl = $('#connectionTemplate')[0];
+        if (!this.connDiv) this.connDiv = $('#connections')[0];
 
-        var responseNode = connTmpl.cloneNode(true);
+        var responseNode = this.connTmpl.cloneNode(true);
         responseNode.id = 'response_'+res.id;
         responseNode.innerHTML = '<div class="urlResponse">'+res.url+'</div>';
         responseNode.style.display = '';
 
         if (!this.lastResponse)
-            connDiv.appendChild(responseNode);
+            this.connDiv.appendChild(responseNode);
         else
-            connDiv.insertBefore(responseNode, this.lastResponse);              
+            this.connDiv.insertBefore(responseNode, this.lastResponse);              
         
         this.lastResponse = responseNode;
    }

@@ -15,7 +15,7 @@ var proxyCache = (function(){
     var proxy = function() {
 
         this.requests = [];
-        this.clients = [];
+        this.clients = {};
         var currentId = 0;
         var self = this;
 
@@ -24,9 +24,10 @@ var proxyCache = (function(){
         };
 
         this.sendToClients = function(objToSend) {
-            this.clients.forEach(function(client) {
-                client.send(objToSend);
-            });
+
+            for (var sessionId in this.clients) {
+               this.clients[sessionId].send(objToSend);
+            }
         };
 
         this.sendRequest = function(reqObj) { 
@@ -35,7 +36,17 @@ var proxyCache = (function(){
         };
 
         this.addClient = function(client) {
-            this.clients.push(client);
+            this.clients[client.sessionId] = client;
+        };
+
+        this.removeClient = function(client) {
+            delete this.clients[client.sessionId];
+            this.log('Diconnecting client '+client.sessionId+' from Proxy Listener');
+        };
+
+        this.log = function(msg) { 
+           console.log(msg);
+           this.sendToClients({handler : 'Log', msg : msg}); 
         };
   
         this.addRequest = function(originalReq, proxyReq) {
@@ -119,14 +130,15 @@ app.listen(3000);
 
 var socket = io.listen(app); 
 socket.on('connection', function(client){
-        client.send({handler : 'Log' , msg : 'Welcome to Proxy Intercept'});
+        proxyCache.log('Welcome to Proxy Intercept');
         proxyCache.addClient(client);
 
         client.on('message', function(data){
             client.send(data.toString());
         }); 
+
         client.on('disconnect', function(){
-            
+            proxyCache.removeClient(client);  
         }); 
 }); 
 

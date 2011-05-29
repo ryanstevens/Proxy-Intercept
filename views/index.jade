@@ -1,8 +1,15 @@
 
 #header
-    h1 Proxy Intercept
+    h1 Proxy Intercept 
+    ul
+        li 
+            div.selected#proxy Proxy Calls
+        li
+            div#console Console
 #content
     div#connections
-        div#connectionTemplate
+        div#connectionTemplate  
+    div#consoleLogs
 script
     tryConnect();
+    var nav = new NavView({el : $('#header')});

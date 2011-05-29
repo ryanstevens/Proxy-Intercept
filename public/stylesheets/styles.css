@@ -5,17 +5,18 @@ html {
 body {
     margin: 0px;
     height: 100%;
+    background-color:#aaaaaa;
 }
 
 #wrapper {
     padding: 0px;
-    height: 100%;
-    background-color:#aaaaaa;;
 }
 
 h1 {
     margin: 0px;    
-    padding-top:5px;
+    padding-top:12px;
+    padding-left:20px;
+    float:left;
 }
 
 #header {
@@ -25,16 +26,56 @@ h1 {
     top : 0px;
     left : 0px;
     width: 100%;
-    padding: 0px 15px;
     background-color:#666;
+    clear:both;
+}
 
+#header ul {
+    height: 26px;
+    margin: 10px 0 0;
+    padding: 6px 10px;
+    position: relative;
+    float:right;
+    margin-right:100px;
+}
+
+#header li {
+    display: inline;
+    list-style-type: none;
+    margin: 0;
+}
+
+#header div {
+    border-radius: 4px 4px 4px 4px;
+    color: #000000;
+    background-color:#cccccc;
+    font-size: 14px;
+    height: 26px;
+    line-height: 26px;
+    display:inline;
+    cursor:pointer;
+    margin-right: 10px;
+    padding: 5px 8px;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+#header div.selected {
+    background-color:white;
+    color:#333333;
+         
+}
+
+#header div.over {
+    background-color:#aaaaaa;
+    color:#333333;
+    text-decoration:none;
 }
 
 #content {
     font-family : Helvetica, sans-serif;
     position:relative;
     height:100%;
-    padding: 50px 15px;
+    padding: 70px 15px;
 }
 
 #connections {
@@ -49,6 +90,24 @@ h1 {
     display:none;
 }
 
+#console {
+    -moz-border-radius : 10px;
+    -webkit-border-radius : 10px;
+    border-radius : 10px;
+    background-color:white;
+    padding: 8px;
+    display:none;                    
+}
+
 .urlResponse {
     margin-top: 8px;
 }
+
+
+
+
+
+
+
+
+
