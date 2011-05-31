@@ -24,7 +24,6 @@ var proxyCache = (function(){
         };
 
         this.sendToClients = function(objToSend) {
-
             for (var sessionId in this.clients) {
                this.clients[sessionId].send(objToSend);
             }
@@ -58,7 +57,6 @@ var proxyCache = (function(){
                 requestHeaders : originalReq.headers,
                 responseHeaders : null
             };
-
 
             this.requests.push(reqObj);
             proxyReq.on('response', function (res) {
@@ -130,7 +128,7 @@ app.listen(3000);
 
 var socket = io.listen(app); 
 socket.on('connection', function(client){
-        proxyCache.log('Welcome to Proxy Intercept');
+        proxyCache.log('Welcome to Proxy Intercept.  You session ID is '+client.sessionId);
         proxyCache.addClient(client);
 
         client.on('message', function(data){

@@ -78,7 +78,7 @@ h1 {
     padding: 70px 15px;
 }
 
-#connections {
+#proxyView {
     -moz-border-radius : 10px;
     -webkit-border-radius : 10px;
     border-radius : 10px;
@@ -90,22 +90,58 @@ h1 {
     display:none;
 }
 
-#console {
+#consoleView {
     -moz-border-radius : 10px;
     -webkit-border-radius : 10px;
     border-radius : 10px;
-    background-color:white;
+    background-color:black;
+
+    color:green;
+    font-size:8pt;
     padding: 8px;
     display:none;                    
 }
 
-.urlResponse {
+.responseUrl {
     margin-top: 8px;
+    cursor:pointer;
+    font-size:9pt;
+}
+
+.responseDetails {
+    -moz-border-radius : 10px;
+    -webkit-border-radius : 10px;
+    border-radius : 10px;
+    background-color:#aaaaaa;
+    padding: 8px;
+    display:none;
+}
+
+.requestConrols  {
+    font-size:8pt;
+}
+
+.requestHeaders {
+    font-size:8pt;
+}
+
+.requestHeaders div {
+    clear:both;
 }
 
 
+.headerKeys {
+    font-weight:bold;
+    width:100px;
+    margin-right:8px;
+    text-align:right;
+    float:left;
+}
 
-
+.headerValues {
+    float:left;
+    width:400px;
+}   
 
 
 

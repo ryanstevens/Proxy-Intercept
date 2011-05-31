@@ -7,9 +7,21 @@
         li
             div#console Console
 #content
-    div#connections
-        div#connectionTemplate  
-    div#consoleLogs
-script
+    div#proxyView
+        div#tmpl-responseTmpl(style='display:none')
+            div.responseUrl <span>{{method}}<span> - {{url}}
+            div.responseDetails
+                div.requestConrols 
+                    span Request Headers
+                    span Response Headers
+                div.requestHeaders
+                    {{#requestHeadersArr}}
+                    div
+                        span.headerKeys {{key}} 
+                        span.headerValues {{value}}
+                    {{/requestHeadersArr}}
+                br(style='clear:both')
+    div#consoleView
+script(type='text/javascript')
+    var proxyControls = new ProxyControls({el : $('#header')});
     tryConnect();
-    var nav = new NavView({el : $('#header')});
