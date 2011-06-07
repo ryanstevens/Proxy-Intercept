@@ -29,11 +29,20 @@ _.convertObjToArr = function(obj) {
 
 };
 
+var tempId = 0;
+_.reIdArr = function(arr) {
+    _.each(arr, function(elem) {
+        elem.id = '_temp_'+tempId++;
+    });
+    return arr;
+};
+
 var CommandCollection = function(options) {
 
     this.options = options || {};
     this.active = $('#'+this.options.commands[0].id);
     this.active.id = this.options.commands[0].id;
+    var self = this;
 
     this.over = function(elem) {
         var targetId = elem.id;
@@ -52,8 +61,20 @@ var CommandCollection = function(options) {
         this.active.removeClass(this.options.activeClass);
         this.active = $('#'+elem.id);
         this.active.addClass(this.options.activeClass).removeClass(this.options.hovorClass).id = elem.id;
-        this.options.callback(elem.id);
+        this.options.callback(elem);
     };
+        
+    _.each(this.options.commands, function(cmd) {
+        $(cmd).bind('mouseenter', function() {
+            self.over(cmd);
+        }).bind('mouseleave', function() {
+            self.out(cmd);
+        }).bind('click', function() {
+            self.toggleActive(cmd);
+        });
+    });
+
+
 };
 _.templateSettings = {
       interpolate : /\{\{(.+?)\}\}/g

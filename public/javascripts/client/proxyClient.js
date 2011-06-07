@@ -2,19 +2,27 @@ String.prototype.htmlEncode = function() {
     return this.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 };
 
+var sessionId;
 var handlers = {
+    onInit : function(res) {
+        sessionId = res.sessionId;
+    },
+    
     onLog : function(res) {
         logs.add(new LogMessage(res));
     },
 
     onResponseData : function(res) {
     },
-    
+   
     onGet : function(res) {
         proxies.add(new ProxyMessage(res));
+    },
+
+    onUpdateData : function(res)
+    {
+        proxies.get(res.id).set({'data': res.data});
     }
-
-
 };
 
 
@@ -25,6 +33,8 @@ socket.on('connect', function(){
 });
 
 socket.on('message', function(data){
+    if (!handlers['on'+data.handler])
+        alert(data.handler + ' not implemented');
     handlers['on'+data.handler](data);
 });
 

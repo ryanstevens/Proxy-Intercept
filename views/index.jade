@@ -12,14 +12,22 @@
             div.responseUrl <span>{{method}}<span> - {{url}}
             div.responseDetails
                 div.requestConrols 
-                    span Request Headers
-                    span Response Headers
+                    span.reqBtn.selected(cmd='requestHeaders') Request Headers
+                    span.reqBtn(cmd='responseHeaders') Response Headers
+                    span.reqBtn(cmd='responseData') Response Data
                 div.requestHeaders
                     {{#requestHeadersArr}}
                     div
                         span.headerKeys {{key}} 
                         span.headerValues {{value}}
                     {{/requestHeadersArr}}
+                div.responseHeaders
+                    {{#responseHeadersArr}}
+                    div
+                        span.headerKeys {{key}}
+                        span.headerValues {{value}}
+                    {{/responseHeadersArr}}
+                div.responseData
                 br(style='clear:both')
     div#consoleView
 script(type='text/javascript')

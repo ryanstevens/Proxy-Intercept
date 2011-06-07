@@ -97,7 +97,7 @@ h1 {
     background-color:black;
 
     color:green;
-    font-size:8pt;
+    font-size:9pt;
     padding: 8px;
     display:none;                    
 }
@@ -119,7 +119,34 @@ h1 {
 
 .requestConrols  {
     font-size:8pt;
+    margin-bottom:8px;
 }
+
+.reqBtn {
+    border-radius: 2px 2px 2px 2px;
+    color: #000000;
+    background-color:#cccccc;
+    font-size: 11px;
+    height: 20px;
+    line-height: 26px;
+    cursor:pointer;
+    margin-right: 10px;
+    padding: 5px 8px;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.requestConrols span.selected {
+    background-color:white;
+    color:#333333;
+
+}
+
+.requestConrols span.over {
+    background-color:#666;
+    color:white;
+    text-decoration:none;
+}
+
 
 .requestHeaders {
     font-size:8pt;
@@ -129,6 +156,14 @@ h1 {
     clear:both;
 }
 
+.responseHeaders {
+    font-size:8pt;
+    display:none;
+}
+
+.responseHeaders div {
+    clear:both;
+}
 
 .headerKeys {
     font-weight:bold;
@@ -143,6 +178,11 @@ h1 {
     width:400px;
 }   
 
+.responseData {
+    display: none;
+    font-size:10pt;
+    margin-top:10px;
+}
 
 
 

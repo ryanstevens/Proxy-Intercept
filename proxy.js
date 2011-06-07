@@ -20,12 +20,18 @@ var proxyCache = (function(){
         var self = this;
 
         this.getNextId = function() {
-            return ++currentId;
+            return currentId++;
         };
 
         this.sendToClients = function(objToSend) {
             for (var sessionId in this.clients) {
-               this.clients[sessionId].send(objToSend);
+                try 
+                {
+                    this.clients[sessionId].send(objToSend);
+                }
+                catch(e) {
+                    console.log('Cannot send data '+e.message);
+                }
             }
         };
 
@@ -41,6 +47,13 @@ var proxyCache = (function(){
         this.removeClient = function(client) {
             delete this.clients[client.sessionId];
             this.log('Diconnecting client '+client.sessionId+' from Proxy Listener');
+        };
+
+        this.getResponseData = function(index, sessionId) {
+            this.log('Sending response stream to '+sessionId);
+            var request = this.requests[index];
+            request.handler = 'UpdateData';
+            return request;
         };
 
         this.log = function(msg) { 
@@ -59,21 +72,28 @@ var proxyCache = (function(){
             };
 
             this.requests.push(reqObj);
+            reqObj.index = this.requests.length-1;
+
             proxyReq.on('response', function (res) {
-         
+
                 reqObj.responseHeaders = res.headers;
                 reqObj.handler = 'Get';
-                self.sendToClients(reqObj);
                 
+                self.sendToClients(reqObj);
+
                 if (res.headers['content-encoding'] === 'gzip'){
                     res = gz.inflater(res);
                 }
             
                 res.addListener('data', function(chunk) {
-                    if (reqObj.isText && chunk) {
+                    //only worry about text           
+                    if (typeof chunk === 'string') {
                         reqObj.data += chunk;  
+                        self.log('Writing data for '+originalReq.url+'   :    '+reqObj.url);
                     }
+                   
                 });
+            
 
             });
     
@@ -95,9 +115,6 @@ var server = http.createServer(function(request, response) {
     var curReq = proxyCache.addRequest(request, proxy_request);
 
     proxy_request.on('response', function (proxy_response) {
-        
-        curReq.isText = (proxy_response.headers['content-type'] && proxy_response.headers['content-type'].indexOf('text') >=0 
-            && request.url.indexOf('.jpg')==-1 && request.url.indexOf('.gif')==-1 && request.url.indexOf('.png')==-1);
         
         proxy_response.addListener('data', function(chunk) {
             response.write(chunk);
@@ -123,6 +140,7 @@ app.use(express.static(__dirname + '/public'));
 app.get('/', function(req, res){
     res.render('index.jade', { pageTitle: 'My Site' });
 });
+
 app.listen(3000);
 
 
@@ -130,9 +148,11 @@ var socket = io.listen(app);
 socket.on('connection', function(client){
         proxyCache.log('Welcome to Proxy Intercept.  You session ID is '+client.sessionId);
         proxyCache.addClient(client);
+        proxyCache.sendToClients({ handler : 'Init', sessionId : client.sessionId}, client.sessionId);
 
         client.on('message', function(data){
-            client.send(data.toString());
+            if (data && data.index>=0)
+                client.send(proxyCache.getResponseData(data.index, data.sessionId));
         }); 
 
         client.on('disconnect', function(){

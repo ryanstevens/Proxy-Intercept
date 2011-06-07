@@ -14,30 +14,12 @@ var ProxyControls = Backbone.View.extend({
         });
     },
     
-    events : {
-        'click div' : 'topShow',
-        'mouseover div' : 'topOver',
-        'mouseout div' : 'topOut'
-    },
-
-    topOver : function (event) {
-        this.topCommands.over(event.target);
-    },
-
-    topOut : function (event) {
-        this.topCommands.out();
-    },
-
-    topShow : function(event) { 
-        this.topCommands.toggleActive(event.target);
-    },
-
-    activateView : function(commandName) { 
+    activateView : function(elem) { 
         $(this.activeView.el).fadeToggle(500, function() {
-            this.activeView = this[commandName+'View'];
+            this.activeView = this[elem.id+'View'];
             $(this.activeView.el).fadeToggle();
         }.bind(this));
-    },
+    }
 
 });
 
@@ -68,19 +50,43 @@ var RequestView = Backbone.View.extend({
     initialize : function() {
         this.template =  $('#tmpl-responseTmpl')[0].innerHTML;
         this.model.set({'requestHeadersArr' :  _.convertObjToArr(this.model.get('requestHeaders'))});
+        this.model.set({'responseHeadersArr' :  _.convertObjToArr(this.model.get('responseHeaders'))});
+        this.model.bind('change:data', this.dataChange.bind(this));
     },
-
+    
     events : {
-        'click div' : 'open'
+        'click div.responseUrl' : 'open'
     },
 
     render : function() {
-        $(this.el).html(Mustache.to_html(this.template, this.model.toJSON()));     
+        $(this.el).html(Mustache.to_html(this.template, this.model.toJSON()));  
         return this;
     },
 
+    postRender : function() {
+        var btns = _.reIdArr($(this.el).find('.requestConrols').find('.reqBtn'));
+        this.btns = new CommandCollection({
+                commands : btns,
+                hovorClass : 'over',
+                activeClass : 'selected',
+                callback : this.activateBtn.bind(this)
+        });
+        this.activeView = $(this.el).find('.requestHeaders');
+    },
+    
     open : function() {
         $(this.el).find('.responseDetails').fadeToggle();
+        socket.send({index : this.model.get('index'), sessionId : sessionId})
+    },
+
+    dataChange : function(model , data) {
+        $(this.el).find('.responseData').html(model.escape('data'));
+    },
+
+    activateBtn : function(elem) {
+        this.activeView.fadeToggle(500, function() {
+            this.activeView = $(this.el).find('.'+$(elem).attr('cmd')).fadeToggle();   
+        }.bind(this));
     }
 });
 
@@ -96,6 +102,7 @@ var ProxyView = Backbone.View.extend({
         });
         this.requests.push(request);
         $(this.el).prepend(request.render().el);
+        if (request.postRender) request.postRender();
     }
 });
 
