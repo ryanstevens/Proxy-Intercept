@@ -141,7 +141,7 @@ app.get('/', function(req, res){
     res.render('index.jade', { pageTitle: 'My Site' });
 });
 
-app.listen(3000);
+app.listen(80);
 
 
 var socket = io.listen(app); 
