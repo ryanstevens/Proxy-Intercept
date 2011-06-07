@@ -50,9 +50,12 @@ var proxyCache = (function(){
         };
 
         this.getResponseData = function(index, sessionId) {
-            this.log('Sending response stream to '+sessionId);
             var request = this.requests[index];
+            if (!request)
+                return;
+
             request.handler = 'UpdateData';
+            this.log('Sending response stream to '+sessionId+ ' for '+request.url);
             return request;
         };
 
@@ -89,7 +92,6 @@ var proxyCache = (function(){
                     //only worry about text           
                     if (typeof chunk === 'string') {
                         reqObj.data += chunk;  
-                        self.log('Writing data for '+originalReq.url+'   :    '+reqObj.url);
                     }
                    
                 });
@@ -141,7 +143,7 @@ app.get('/', function(req, res){
     res.render('index.jade', { pageTitle: 'My Site' });
 });
 
-app.listen(8000);
+app.listen(80);
 
 
 var socket = io.listen(app); 
