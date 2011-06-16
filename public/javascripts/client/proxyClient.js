@@ -21,6 +21,7 @@ var handlers = {
 
     onUpdateData : function(res)
     {
+        console.log(res.id+"::"+res.data.length);
         proxies.get(res.id).set({'data': res.data});
     }
 };

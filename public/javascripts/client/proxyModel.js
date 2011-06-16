@@ -80,6 +80,7 @@ var RequestView = Backbone.View.extend({
     },
 
     dataChange : function(model , data) {
+        console.log(model.get('data').length);
         $(this.el).find('.responseData').html(model.escape('data'));
     },
 

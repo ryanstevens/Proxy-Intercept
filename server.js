@@ -3,121 +3,25 @@ var sys = require('sys');
 var http = require('http');
 var net = require('net');
 var url = require('url');
-var gz = require('./gzip.js');
 var io = require('socket.io');
 var express = require('express');
+var proxy = require('./proxy.js');
 var ipAddr = '127.0.0.1';
 var port = 8080;
-    
 
-var proxyCache = (function(){
-
-    var proxy = function() {
-
-        this.requests = [];
-        this.clients = {};
-        var currentId = 0;
-        var self = this;
-
-        this.getNextId = function() {
-            return currentId++;
-        };
-
-        this.sendToClients = function(objToSend) {
-            for (var sessionId in this.clients) {
-                try 
-                {
-                    this.clients[sessionId].send(objToSend);
-                }
-                catch(e) {
-                    console.log('Cannot send data '+e.message);
-                }
-            }
-        };
-
-        this.sendRequest = function(reqObj) { 
-            reqObj.handler = 'ResponseData';
-            this.sendToClients(reqObj);
-        };
-
-        this.addClient = function(client) {
-            this.clients[client.sessionId] = client;
-        };
-
-        this.removeClient = function(client) {
-            delete this.clients[client.sessionId];
-            this.log('Diconnecting client '+client.sessionId+' from Proxy Listener');
-        };
-
-        this.getResponseData = function(index, sessionId) {
-            var request = this.requests[index];
-            if (!request)
-                return;
-
-            request.handler = 'UpdateData';
-            this.log('Sending response stream to '+sessionId+ ' for '+request.url);
-            return request;
-        };
-
-        this.log = function(msg) { 
-           console.log(msg);
-           this.sendToClients({handler : 'Log', msg : msg}); 
-        };
-  
-        this.addRequest = function(originalReq, proxyReq) {
-            var reqObj = {
-                id : this.getNextId(),
-                url : originalReq.url,
-                data : '',
-                method: originalReq.method,
-                requestHeaders : originalReq.headers,
-                responseHeaders : null
-            };
-
-            this.requests.push(reqObj);
-            reqObj.index = this.requests.length-1;
-
-            proxyReq.on('response', function (res) {
-
-                reqObj.responseHeaders = res.headers;
-                reqObj.handler = 'Get';
-                
-                self.sendToClients(reqObj);
-
-                if (res.headers['content-encoding'] === 'gzip'){
-                    res = gz.inflater(res);
-                }
-            
-                res.addListener('data', function(chunk) {
-                    //only worry about text           
-                    if (typeof chunk === 'string') {
-                        reqObj.data += chunk;  
-                    }
-                   
-                });
-            
-
-            });
-    
-            return reqObj;
-        };   
-    };
-    return new proxy();
-})();
-
-
+var ProxyServer = proxy.ProxyServer;
+var proxyCache = proxy.proxyCache;
 var server = http.createServer(function(request, response) {
-    var proxy = http.createClient(80, request.headers['host']);
 
-    proxy.on('error', function(er){
+    
+    var proxy_request = ProxyServer.createRequest(request);
+    proxy_request.on('error', function(er){
         response.end();
     });  
 
-    var proxy_request = proxy.request(request.method, request.url, request.headers);
-    var curReq = proxyCache.addRequest(request, proxy_request);
-
     proxy_request.on('response', function (proxy_response) {
-        
+ 
+        proxy_response = ProxyServer.createResponse(proxy_response);       
         proxy_response.addListener('data', function(chunk) {
             response.write(chunk);
         });
