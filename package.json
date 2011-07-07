@@ -10,9 +10,6 @@
     "lib": "lib",
     "license": [
         "Apache License 2.0",
-    ],
-    "dependencies": [
-        "v8-profiler": "0.0.3"
     ]
 }
 
