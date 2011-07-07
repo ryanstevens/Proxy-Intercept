@@ -1,0 +1,19 @@
+{
+    "name": "Proxy-Intercept",
+    "description": "This project allows users to proxy requests through the server and see responses via a web UI",
+    "keywords": [
+        "proxy",
+        "intercept"
+    ],
+    "author": "Ryan Stevens",
+    "contributors": [],
+    "lib": "lib",
+    "license": [
+        "Apache License 2.0",
+    ],
+    "dependencies": [
+        "v8-profiler": "0.0.3"
+    ]
+}
+
+
