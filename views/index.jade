@@ -6,6 +6,8 @@
             div.selected#proxy Proxy Calls
         li
             div#console Console
+        li
+            div#inercept Intercepts
 #content
     div#proxyView
         div#tmpl-responseTmpl(style='display:none')
@@ -30,6 +32,7 @@
                 div.responseData
                 br(style='clear:both')
     div#consoleView
+    div#interceptView
 script(type='text/javascript')
     var proxyControls = new ProxyControls({el : $('#header')});
-    tryConnect();
+    connect();

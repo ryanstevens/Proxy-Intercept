@@ -86,6 +86,10 @@ h1 {
     padding: 8px;
 }
 
+#interceptView {
+    display:none;
+}
+
 #connectionTemplate {
     display:none;
 }

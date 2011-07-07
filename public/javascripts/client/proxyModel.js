@@ -4,10 +4,11 @@ var ProxyControls = Backbone.View.extend({
     initialize: function(){
         this.proxyView = new ProxyView({el : $('#proxyView')[0], collection : proxies});
         this.consoleView = new LogView({el: $('#consoleView')[0], collection : logs});
+        this.interceptView = new InterceptView({el : $('#inerceptView')[0]});
         this.activeView = this.proxyView;
 
         this.topCommands = new CommandCollection({
-                commands : [$('#proxy')[0], $('#console')[0]],
+                commands : [$('#proxy')[0], $('#console')[0], $('#inercept')[0]], 
                 hovorClass : 'over',
                 activeClass : 'selected',
                 callback : this.activateView.bind(this)
@@ -23,6 +24,11 @@ var ProxyControls = Backbone.View.extend({
 
 });
 
+var InterceptView = Backbone.View.extend({
+    initialize : function() {
+    
+    }
+});
 
 
 var LogMessage = Backbone.Model.extend({});

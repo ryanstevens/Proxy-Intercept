@@ -103,15 +103,16 @@ exports.ProxyServer = (function() {
         
         this.createRequest = function(request) {
             
-            var proxyClient = http.createClient(80, request.headers['host']);
+            var proxy_request = http.request({
+                    host : request.headers['host'],
+                    port : request.port,
+                    method : request.method,
+                    path : request.url,
+                    headers : request.headers
+                }
+            );
 
-            proxyClient.on('error', function(er){
-                this.emit('error', er)    
-            }.bind(this));
-
-            var proxy_request = proxyClient.request(request.method, request.url, request.headers);
             proxyCache.addRequest(request, proxy_request);
-    
             return proxy_request;
         };
 
@@ -121,17 +122,15 @@ exports.ProxyServer = (function() {
                 this[prop] = proxyRes[prop];
             }.bind(this));
 
-
-            proxyRes.on('data', function(chunk) {
-
-                this.emit('data', chunk);
-
+            
+            ['error', 'data', 'end'].forEach(function(eventName) {
+                proxyRes.on(eventName, function(arg) {
+                   this.emit(eventName, arg);     
+                }.bind(this));
             }.bind(this));
 
-            proxyRes.on('end', function() {
-
+            proxyRes.on('close', function () {
                 this.emit('end');
-
             }.bind(this));
         };
 

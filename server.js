@@ -1,5 +1,5 @@
 var sys = require('sys'); 
-//var profiler =  require("v8-profiler");
+var profiler =  require("v8-profiler");
 var http = require('http');
 var net = require('net');
 var url = require('url');
@@ -14,23 +14,33 @@ var proxyCache = proxy.proxyCache;
 var server = http.createServer(function(request, response) {
 
     
-    var proxy_request = ProxyServer.createRequest(request);
+    var proxy_request = null;
+    try {
+        proxy_request = ProxyServer.createRequest(request);
+    }
+    catch(e) {
+        console.log('Problem creating request' + e.message);
+        response.end();
+        return;
+    }
+    
     proxy_request.on('error', function(er){
         response.end();
     });  
 
+
     proxy_request.on('response', function (proxy_response) {
  
-        proxy_response = ProxyServer.createResponse(proxy_response);       
-        proxy_response.addListener('data', function(chunk) {
+        var responder = ProxyServer.createResponse(proxy_response);       
+        responder.addListener('data', function(chunk) {
             response.write(chunk);
         });
      
-        proxy_response.addListener('end', function() {
+        responder.addListener('end', function() {
             response.end();
         });
          
-        response.writeHead(proxy_response.statusCode, proxy_response.headers);
+        response.writeHead(proxy_response.statusCode, responder.headers);
     });
 
     request.on('end', function() {
@@ -65,6 +75,12 @@ socket.on('connection', function(client){
             proxyCache.removeClient(client);  
         }); 
 }); 
+
+['unhandledException', 'error'].forEach(function(eventName) {
+    socket.on(eventName, function(e) {
+        console.log('error on socket');
+    });
+});
 
 
 sys.puts('Server running at http://'+ipAddr+':'+port+'/');
