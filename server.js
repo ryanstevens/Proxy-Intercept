@@ -5,7 +5,7 @@ var net = require('net');
 var url = require('url');
 var io = require('socket.io');
 var express = require('express');
-var proxy = require('./proxy.js');
+var proxy = require('./lib/proxy.js');
 var ipAddr = '127.0.0.1';
 var port = 8080;
 
