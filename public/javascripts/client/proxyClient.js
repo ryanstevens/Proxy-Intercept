@@ -21,8 +21,7 @@ var handlers = {
 
     onUpdateData : function(res)
     {
-        console.log(res.id+"::"+res.data.length);
-        proxies.get(res.id).set({'data': res.data});
+        proxies.get(res.id).set(res);
     }
 };
 
@@ -64,7 +63,8 @@ socket.on('message', function(data){
     if (!handlers['on'+data.handler])
         console.log(data.handler + ' not implemented');
  
-    handlers['on'+data.handler](data);
+    console.log('invoking '+data.handler);
+    handlers['on'+data.handler](data.payload);
 });
 
 socket.on('disconnect', function() {

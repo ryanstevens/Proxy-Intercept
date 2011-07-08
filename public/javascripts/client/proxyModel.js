@@ -57,7 +57,7 @@ var RequestView = Backbone.View.extend({
         this.template =  $('#tmpl-responseTmpl')[0].innerHTML;
         this.model.set({'requestHeadersArr' :  _.convertObjToArr(this.model.get('requestHeaders'))});
         this.model.set({'responseHeadersArr' :  _.convertObjToArr(this.model.get('responseHeaders'))});
-        this.model.bind('change:data', this.dataChange.bind(this));
+        this.model.bind('change:gen', this.dataChange.bind(this));
     },
     
     events : {
@@ -82,10 +82,10 @@ var RequestView = Backbone.View.extend({
     
     open : function() {
         $(this.el).find('.responseDetails').fadeToggle();
-        socket.send({index : this.model.get('index'), sessionId : sessionId})
+        socket.send({handler : 'GetRequest', payload : {index : this.model.get('index')}});
     },
 
-    dataChange : function(model , data) {
+    dataChange : function(model) {
         console.log(model.get('data').length);
         $(this.el).find('.responseData').html(model.escape('data'));
     },
