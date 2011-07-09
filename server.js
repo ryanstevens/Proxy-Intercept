@@ -19,6 +19,18 @@ app.get('/', function(req, res){
 app.listen(80);
 
 var socket = io.listen(app);
+
+function(socket) {
+
+    socket.on('connection', function(client){
+    
+});
+
+return;
+
+
+
+
 var transport = clientTransport.getInstance(socket);
 var ProxyServer = proxy.createServer(transport);
 
