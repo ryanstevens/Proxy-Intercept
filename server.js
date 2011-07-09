@@ -20,9 +20,8 @@ app.listen(80);
 
 var socket = io.listen(app);
 
-function(socket) {
 
-    socket.on('connection', function(client){
+socket.on('connection', function(client){
     
 });
 
