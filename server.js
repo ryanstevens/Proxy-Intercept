@@ -22,9 +22,9 @@ var socket = io.listen(app);
 
 if (true) {
     socket.on('connection', function(client){
-
-    client.send({handler : 'Log', payload: 'test'});
-}); return; }
+        client.send({handler : 'Log', payload: {msg :'test'}});
+    }
+); return; }
 
 var transport = clientTransport.getInstance(socket);
 var ProxyServer = proxy.createServer(transport);
