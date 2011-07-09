@@ -72,11 +72,11 @@ socket.on('message', function(data){
     }
    
     if (data == null || !data)
-        console.log('data is undefined');
+        return console.log('data is undefined');
     if (!data.handler)
-        console.log('no handler defined');
+        return console.log('no handler defined');
     if (!handlers['on'+data.handler])
-        console.log(data.handler + ' not implemented');
+        return console.log(data.handler + ' not implemented');
  
     handlers['on'+data.handler](data.payload);
 });
