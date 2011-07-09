@@ -20,7 +20,7 @@ app.listen(80);
 
 var socket = io.listen(app);
 
-if (true) {
+if (false) {
     socket.on('connection', function(client){
         client.send({handler : 'Log', payload: {msg :'test'}});
     }
