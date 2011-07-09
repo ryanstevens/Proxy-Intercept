@@ -20,15 +20,11 @@ app.listen(80);
 
 var socket = io.listen(app);
 
+if (true) {
+    socket.on('connection', function(client){
 
-socket.on('connection', function(client){
-    
-});
-
-return;
-
-
-
+    client.send({handler : 'Log', payload: 'test'});
+}); return; }
 
 var transport = clientTransport.getInstance(socket);
 var ProxyServer = proxy.createServer(transport);

@@ -61,6 +61,7 @@ var tryReconnect = function() {
 
 socket.on('connect', function(){
     console.log('connected');
+    connected = true;
 });
 
 socket.on('message', function(data){
