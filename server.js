@@ -26,15 +26,7 @@ var ProxyServer = proxy.createServer(transport);
 var server = http.createServer(function(request, response) {
 
     
-    var proxy_request = null;
-    try {
-        proxy_request = ProxyServer.createRequest(request);
-    }
-    catch(e) {
-        console.log('Problem creating request' + e.message);
-        response.end();
-        return;
-    }
+    var proxy_request = ProxyServer.createRequest(request);
     
     proxy_request.on('error', function(er){
         response.end();

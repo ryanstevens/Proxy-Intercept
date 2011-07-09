@@ -86,8 +86,7 @@ var RequestView = Backbone.View.extend({
     },
 
     dataChange : function(model) {
-        console.log(model.get('data').length);
-        $(this.el).find('.responseData').html(model.escape('data'));
+        $(this.el).find('.responseData').html(escapeHTML(model.get('data').join('')));
     },
 
     activateBtn : function(elem) {

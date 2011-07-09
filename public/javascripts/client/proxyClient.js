@@ -4,8 +4,24 @@ String.prototype.htmlEncode = function() {
 
 var sessionId;
 var handlers = {
+    testItr : 0,
     onInit : function(res) {
         sessionId = res.sessionId;
+        this.startTest = (new Date()).getTime();
+
+        for (var i=1; i<=100; i++) 
+        {   
+            this.testItr++;
+            socket.send({'handler' : 'Test', payload : i});
+        }
+    },
+
+    onTest : function(res) {
+        this.testItr--;
+        if (this.testItr == 0)
+        {
+            console.log(((new Date()).getTime() - this.startTest) / 1000);
+        }
     },
     
     onLog : function(res) {
@@ -19,8 +35,7 @@ var handlers = {
         proxies.add(new ProxyMessage(res));
     },
 
-    onUpdateData : function(res)
-    {
+    onUpdateData : function(res) {
         proxies.get(res.id).set(res);
     }
 };
@@ -63,7 +78,6 @@ socket.on('message', function(data){
     if (!handlers['on'+data.handler])
         console.log(data.handler + ' not implemented');
  
-    console.log('invoking '+data.handler);
     handlers['on'+data.handler](data.payload);
 });
 

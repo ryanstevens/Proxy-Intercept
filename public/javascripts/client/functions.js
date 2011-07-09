@@ -80,3 +80,7 @@ _.templateSettings = {
       interpolate : /\{\{(.+?)\}\}/g
 };
 
+function escapeHTML(string) {
+    return string.replace(/&(?!\w+;)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+}
+
