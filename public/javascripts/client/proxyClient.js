@@ -9,7 +9,7 @@ var handlers = {
         sessionId = res.sessionId;
         this.startTest = (new Date()).getTime();
 
-        for (var i=1; i<=100; i++) 
+        for (var i=1; i<=5; i++) 
         {   
             this.testItr++;
             socket.send({'handler' : 'Test', payload : i});
