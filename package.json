@@ -7,10 +7,7 @@
     ],
     "author": "Ryan Stevens",
     "contributors": [],
-    "lib": "lib",
-    "license": [
-        "Apache License 2.0",
-    ]
+    "lib": "lib"
 }
 
 
