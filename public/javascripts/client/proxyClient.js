@@ -41,7 +41,7 @@ var handlers = {
 };
 
 
-var socket = new io.Socket();
+var socket = new io.Socket("http://localhost");
 var disconnectedTimeout = null;
 var connected = false;
 

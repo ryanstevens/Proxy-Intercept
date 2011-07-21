@@ -19,14 +19,8 @@ app.get('/', function(req, res){
 app.listen(80);
 
 var socket = io.listen(app);
-
-if (false) {
-    socket.on('connection', function(client){
-        client.send({handler : 'Log', payload: {msg :'test'}});
-    }
-); return; }
-
 var transport = clientTransport.getInstance(socket);
+
 var ProxyServer = proxy.createServer(transport);
 
 
