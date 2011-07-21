@@ -41,7 +41,7 @@ var handlers = {
 };
 
 
-var socket = new io.Socket("http://localhost");
+var socket = io.connect();
 var disconnectedTimeout = null;
 var connected = false;
 
@@ -49,7 +49,7 @@ var connect = function() {
 
   if (!connected) {
         console.log('trying to connect');
-        socket.connect();
+        //socket.connect();
         tryReconnect();
   }
     
