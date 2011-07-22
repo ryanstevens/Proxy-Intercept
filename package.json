@@ -1,5 +1,6 @@
 {
     "name": "Proxy-Intercept",
+    "version" : "0.1.0",
     "description": "This project allows users to proxy requests through the server and see responses via a web UI",
     "keywords": [
         "proxy",
