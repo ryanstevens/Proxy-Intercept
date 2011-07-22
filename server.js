@@ -1,5 +1,5 @@
 var sys = require('sys'); 
-//var profiler =  require("v8-profiler");
+var profiler =  require("v8-profiler");
 var http = require('http');
 var net = require('net');
 var url = require('url');
@@ -12,6 +12,7 @@ var port = 8080;
 
 var app = express.createServer();
 app.set('view engine', 'jade');
+app.set('log level', 1);
 app.use(express.static(__dirname + '/public'));
 app.get('/', function(req, res){
     res.render('index.jade', { pageTitle: 'My Site' });
@@ -20,9 +21,7 @@ app.listen(80);
 
 var socket = io.listen(app);
 var transport = clientTransport.getInstance(socket);
-
 var ProxyServer = proxy.createServer(transport);
-
 
 var server = http.createServer(function(request, response) {
 

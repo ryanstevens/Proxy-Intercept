@@ -82,7 +82,9 @@ var RequestView = Backbone.View.extend({
     
     open : function() {
         $(this.el).find('.responseDetails').fadeToggle();
-        socket.send({handler : 'GetRequest', payload : {index : this.model.get('index')}});
+        var idx = this.model.get('index');
+        var jsonObj = {handler : 'GetRequest', payload : {index: idx}};
+        socket.json.send(jsonObj);
     },
 
     dataChange : function(model) {

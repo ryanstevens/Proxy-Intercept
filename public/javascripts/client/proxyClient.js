@@ -2,25 +2,27 @@ String.prototype.htmlEncode = function() {
     return this.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 };
 
-var sessionId;
 var handlers = {
     testItr : 0,
+    ff:0,
     onInit : function(res) {
-        sessionId = res.sessionId;
-        this.startTest = (new Date()).getTime();
+    
+        console.log('inited');    
+           this.startTest = (new Date()).getTime();
 
-        for (var i=1; i<=10; i++) 
+        for (var i=1; i<=3000; i++) 
         {   
             this.testItr++;
-     //       socket.send({'handler' : 'Test', payload : i});
+            socket.json.send({'handler' : 'Test', payload : i});
         }
     },
 
     onTest : function(res) {
         this.testItr--;
+       this.ff++;
         if (this.testItr == 0)
         {
-            console.log(((new Date()).getTime() - this.startTest) / 1000);
+            console.log(this.ff+":"+((new Date()).getTime() - this.startTest) / 1000);
         }
     },
     
@@ -41,50 +43,27 @@ var handlers = {
 };
 
 
-var socket = io.connect();
-var disconnectedTimeout = null;
-var connected = false;
-
-var connect = function() {
-
-  if (!connected) {
-        console.log('trying to connect');
-        //socket.connect();
-        tryReconnect();
-  }
+var socket;
+function connect() {
     
-};
+    socket = io.connect();
+    socket.on('connect', function(){
+        console.log('connected');
+    });
 
-var tryReconnect = function() { 
-    disconnectedTimeout = setTimeout(connect, 5000);
-};
-
-socket.on('connect', function(){
-    console.log('connected');
-    connected = true;
-});
-
-socket.on('message', function(data){
-    //only clear timeout when you get proof there is an active connection
-    if (disconnectedTimeout) {
-        disconnectedTimeout = true;
-        connected = true;
-        clearTimeout(disconnectedTimeout);
-    }
+    socket.on('message', function(data){
    
-    if (data == null || !data)
-        return console.log('data is undefined');
-    if (!data.handler)
-        return console.log('no handler defined');
-    if (!handlers['on'+data.handler])
-        return console.log(data.handler + ' not implemented');
+        if (data == null || !data)
+            return console.log('data is undefined');
+        if (!data.handler)
+            return console.log('no handler defined');
+        if (!handlers['on'+data.handler])
+            return console.log(data.handler + ' not implemented');
  
-    handlers['on'+data.handler](data.payload);
-});
+        handlers['on'+data.handler](data.payload);
+    });
 
-socket.on('disconnect', function() {
-    tryReconnect();
-    connected = false;
-});
+
+}
 
 
