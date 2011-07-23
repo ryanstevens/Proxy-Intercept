@@ -79,11 +79,33 @@ h1 {
 }
 
 #proxyView {
+}
+
+#responseContainer {
+    height:600px;
+    overflow:scroll;
     -moz-border-radius : 10px;
     -webkit-border-radius : 10px;
     border-radius : 10px;
     background-color:white;
     padding: 8px;
+}
+
+.proxyBtn {
+    border-radius: 2px 2px 2px 2px;
+    color: #000000;
+    background-color:#cccccc;
+    font-size: 11px;
+    height: 20px;
+    line-height: 26px;
+    cursor:pointer;
+    margin-right: 10px;
+    padding: 5px 8px;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+#proxyFilter {
+    display:none;
 }
 
 #interceptView {

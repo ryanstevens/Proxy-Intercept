@@ -10,27 +10,33 @@
             div#inercept Intercepts
 #content
     div#proxyView
-        div#tmpl-responseTmpl(style='display:none')
-            div.responseUrl <span>{{method}}<span> - {{url}}
-            div.responseDetails
-                div.requestConrols 
-                    span.reqBtn.selected(cmd='requestHeaders') Request Headers
-                    span.reqBtn(cmd='responseHeaders') Response Headers
-                    span.reqBtn(cmd='responseData') Response Data
-                div.requestHeaders
-                    {{#requestHeadersArr}}
-                    div
-                        span.headerKeys {{key}} 
-                        span.headerValues {{value}}
-                    {{/requestHeadersArr}}
-                div.responseHeaders
-                    {{#responseHeadersArr}}
-                    div
-                        span.headerKeys {{key}}
-                        span.headerValues {{value}}
-                    {{/responseHeadersArr}}
-                div.responseData
-                br(style='clear:both')
+        div#proxyControls
+            span.proxyBtn#status Streaming
+            span.proxyBtn#filter Filter
+        div#proxyFilter
+            span filter
+        div#responseContainer
+            div#tmpl-responseTmpl(style='display:none')
+                div.responseUrl <span>{{method}}<span> - {{url}}
+                div.responseDetails
+                    div.requestConrols 
+                        span.reqBtn.selected(cmd='requestHeaders') Request Headers
+                        span.reqBtn(cmd='responseHeaders') Response Headers
+                        span.reqBtn(cmd='responseData') Response Data
+                    div.requestHeaders
+                        {{#requestHeadersArr}}
+                        div
+                            span.headerKeys {{key}} 
+                            span.headerValues {{value}}
+                        {{/requestHeadersArr}}
+                    div.responseHeaders
+                        {{#responseHeadersArr}}
+                        div
+                            span.headerKeys {{key}}
+                            span.headerValues {{value}}
+                        {{/responseHeadersArr}}
+                    div.responseData
+                    br(style='clear:both')
     div#consoleView
     div#interceptView
 script(type='text/javascript')

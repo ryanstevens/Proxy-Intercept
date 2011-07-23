@@ -83,8 +83,7 @@ var RequestView = Backbone.View.extend({
     open : function() {
         $(this.el).find('.responseDetails').fadeToggle();
         var idx = this.model.get('index');
-        var jsonObj = {handler : 'GetRequest', payload : {index: idx}};
-        socket.json.send(jsonObj);
+        socket.json.send({handler : 'GetRequest', payload : {index: idx}});
     },
 
     dataChange : function(model) {
@@ -102,14 +101,25 @@ var ProxyView = Backbone.View.extend({
     initialize : function() {
         this.requests = [];
         this.collection.bind('add', this.add.bind(this));
+
     },
+
+    events : {
+        'click span#status' : 'stream'
+    },
+
+    stream : function() {
+    
+        
+    },
+
 
     add : function(proxyMessage) {
         var request = new RequestView({
            model : proxyMessage
         });
         this.requests.push(request);
-        $(this.el).prepend(request.render().el);
+        $('#responseContainer').prepend(request.render().el);
         if (request.postRender) request.postRender();
     }
 });

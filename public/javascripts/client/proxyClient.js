@@ -3,27 +3,8 @@ String.prototype.htmlEncode = function() {
 };
 
 var handlers = {
-    testItr : 0,
-    ff:0,
     onInit : function(res) {
-    
         console.log('inited');    
-           this.startTest = (new Date()).getTime();
-
-        for (var i=1; i<=3000; i++) 
-        {   
-            this.testItr++;
-            socket.json.send({'handler' : 'Test', payload : i});
-        }
-    },
-
-    onTest : function(res) {
-        this.testItr--;
-       this.ff++;
-        if (this.testItr == 0)
-        {
-            console.log(this.ff+":"+((new Date()).getTime() - this.startTest) / 1000);
-        }
     },
     
     onLog : function(res) {
@@ -45,7 +26,7 @@ var handlers = {
 
 var socket;
 function connect() {
-    
+
     socket = io.connect();
     socket.on('connect', function(){
         console.log('connected');

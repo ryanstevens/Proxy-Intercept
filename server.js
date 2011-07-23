@@ -27,7 +27,11 @@ var server = http.createServer(function(request, response) {
 
     
     var proxy_request = ProxyServer.createRequest(request);
-    
+    if (!proxy_request) {
+        response.end();
+        return;
+    }
+
     proxy_request.on('error', function(er){
         response.end();
     });  
