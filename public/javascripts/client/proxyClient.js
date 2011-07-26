@@ -46,9 +46,15 @@ var handlers = {
     onUpdateIntercept : function(res) {
         var intercept = intercepts.get(res.id);
         if (intercept) 
-            intercepts.set(res);
+            intercept.set(res, {silent: false});
         else
             intercepts.add(res);
+    },
+
+    onDeleteIntercept : function(res) {
+        var intercept = intercepts.get(res.id);
+        if (intercept) 
+            intercepts.remove(intercept);
     }
 };
 

@@ -272,6 +272,10 @@ h1 {
     background-color: grey;
 }
 
+.owner {
+    background-color:YellowGreen;
+}
+
 .url { 
     font-size:10pt;
     margin-top:10px;
@@ -283,16 +287,19 @@ h1 {
 }
 
 .code {
+    
     -moz-border-radius : 10px;
     -webkit-border-radius : 10px;
     border-radius : 10px;
     background-color:lightgrey;
     padding-left:30px;
     margin-top:20px;   
+    padding-top:10px;
+    padding-bottom:10px;
 }
 
-.code textarea {
-        
+.regexInput {
+    width : 400px;
 }
 
 .func {

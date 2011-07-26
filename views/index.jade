@@ -55,8 +55,10 @@
                     span.reqBtn(cmd='responseData') Response Data
                 div.intercept
                     div.url {{url}}
-                    input.regexInput
-                    span.reqBtn.save Save
+                    div
+                        div Regex
+                        input.regexInput
+                        span.reqBtn.save Save
                     div.code
                         div function intercept(url, requestHeaders, responseHeaders, data) {
                         div.func var resObj = { headers : responseHeaders, responseText : data };

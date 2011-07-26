@@ -40,7 +40,11 @@ var LogView = Backbone.View.extend({
 
 
 
-var ProxyMessage = Backbone.Model.extend({});
+var ProxyMessage = Backbone.Model.extend({
+    isInterceptOwner : function() {
+        return (sessionId === this.get('sessionOwner'));   
+    }
+});
 var ProxyCollection = Backbone.Collection.extend( {
     model : ProxyMessage
 });
@@ -50,7 +54,7 @@ var RequestView = Backbone.View.extend({
         this.template =  $('#tmpl-responseTmpl')[0].innerHTML;
         this.model.set({'requestHeadersArr' :  _.convertObjToArr(this.model.get('requestHeaders'))});
         this.model.set({'responseHeadersArr' :  _.convertObjToArr(this.model.get('responseHeaders'))});
-        this.model.bind('change:gen', this.dataChange.bind(this));
+        this.model.bind('change', this.dataChange.bind(this));
         this.model.bind('change:display', this.render.bind(this));
     },
     
@@ -126,7 +130,7 @@ var ProxyView = Backbone.View.extend({
 
             _.each(this.collection.models, function(req) {
                 if (!req.get('display'))
-                    req.set({'display': true});  
+                    req.set({'display': true}, {silent: true});  
             });
         }
         else
@@ -139,7 +143,7 @@ var ProxyView = Backbone.View.extend({
     },
 
     add : function(proxyMessage) {
-        proxyMessage.set({'display' : !(this.streamPaused)});
+        proxyMessage.set({'display' : !(this.streamPaused)}, {silent: true});
         var request = new RequestView({
            model : proxyMessage
         });
@@ -186,7 +190,7 @@ var InterceptView = Backbone.View.extend({
 var InterceptItem = Backbone.View.extend({
     initialize : function() {
         this.template =  $('#tmpl-intercept')[0].innerHTML;
-        this.model.bind('change:regex', this.render.bind(this));    
+        this.model.bind('change', this.render.bind(this));    
     },
 
     events : {
@@ -198,8 +202,12 @@ var InterceptItem = Backbone.View.extend({
     },
 
     render : function() {
+
         $(this.el).html(Mustache.to_html(this.template, flattenObj(this.model.toJSON())));
-        this.el.className = 'interceptItem';
+        this.el.className =  'interceptItem';
+        if (this.model.isInterceptOwner())
+            $(this.el).addClass('owner');
+        
         return this;
     }
 });
@@ -219,12 +227,16 @@ var InterceptFunctions = {
         if (!intercept)
             return;
 
-        intercept.set(interceptObj);
-        
+        intercept.set(interceptObj, {silent: false});
         if (interceptObj.sessionOwner !== sessionId)
             return;
 
-        var returnObj= this.intercepts[interceptObj.id].call(intercept, intercept.get('url'), intercept.get('requestHeaders'), intercept.get('responseHeaders'), intercept.get('data').join(''));
+        var returnObj= this.intercepts[interceptObj.id].call(intercept, 
+            intercept.get('url'), 
+            intercept.get('requestHeaders'), 
+            intercept.get('responseHeaders'), 
+            intercept.get('data').join(''));
+
         returnObj.proxyMessageId = interceptObj.id;
         socket.json.send({handler : 'clientResponse', payload : returnObj}); 
     }
@@ -234,6 +246,7 @@ var InterceptDetail = Backbone.View.extend({
 
     initialize : function() {
         this.template = $('#tmpl-interceptDetail')[0].innerHTML;
+        this.model.bind('change', this.render.bind(this));
     },
 
     events : {
@@ -243,7 +256,8 @@ var InterceptDetail = Backbone.View.extend({
     save : function() { 
         this.model.set({'sessionOwner': sessionId, 
                         'regex' : $(this.el).find('.regexInput')[0].value, 
-                        'customCode': $(this.el).find('.code').find('textarea')[0].value});       
+                        'gen' : (this.model.get('gen')+1),
+                        'customCode': $(this.el).find('.code').find('textarea')[0].value}, {silent: false});       
  
         eval( 'InterceptFunctions.register('+this.model.get('id')+' ,  function(url, requestHeaders, responseHeaders, data) { '+
                    'var resObj = { headers : responseHeaders, responseText : data };' + 
@@ -255,8 +269,11 @@ var InterceptDetail = Backbone.View.extend({
 
     render : function() {
         $(this.el).html(Mustache.to_html(this.template, this.model.toJSON()));
+        $(this.el).find('.responseData').html(escapeHTML(this.model.get('data').join('')));
         if (this.model.toJSON()['regex']) $(this.el).find('.regexInput')[0].value = this.model.get('regex');
         if (this.model.toJSON()['customCode']) $(this.el).find('.code').find('textarea')[0].value = this.model.get('customCode');
+        
+       
         return this;
     },
 
