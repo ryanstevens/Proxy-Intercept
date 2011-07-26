@@ -202,6 +202,12 @@ h1 {
 .headerValues {
     float:left;
     width:400px;
+}
+
+.copyIntercept {
+    margin-top:30px;
+    width:48px;
+    text-align:center;
 }   
 
 .responseData {
@@ -209,6 +215,95 @@ h1 {
     font-size:10pt;
     margin-top:10px;
 }
+
+#interceptView {
+    clear:both;
+}
+
+#interceptList {
+    height:700px;
+    -moz-border-radius : 10px;
+    -webkit-border-radius : 10px;
+    border-radius : 10px;
+    background-color:white;
+    padding: 8px;
+    width:280px;
+    float:left;
+}
+
+#interceptDetail {
+    -moz-border-radius : 10px;
+    -webkit-border-radius : 10px;
+    border-radius : 10px;
+    background-color:white;
+    padding: 8px;
+    width:800px;
+    height:700px;
+    float:left;
+    margin-left:20px;
+    overflow: scroll;
+}
+
+
+#tmpl-intercept {
+    display : none;  
+}
+
+
+.interceptItem {
+    display:block;
+    font-size:8pt;
+    border-bottom:solid 1px lightgray;
+    border-top:solid 1px lightgray;
+    padding-top:10px;
+    padding-bottom:10px;
+    padding-left:8px;
+    height:60px;
+    cursor:pointer;
+}
+
+.title {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 270px;
+}
+
+.interceptItem:hover {
+    background-color: grey;
+}
+
+.url { 
+    font-size:10pt;
+    margin-top:10px;
+    margin-bottom:20px;
+}
+
+.save {
+    margin-left:10px;
+}
+
+.code {
+    -moz-border-radius : 10px;
+    -webkit-border-radius : 10px;
+    border-radius : 10px;
+    background-color:lightgrey;
+    padding-left:30px;
+    margin-top:20px;   
+}
+
+.code textarea {
+        
+}
+
+.func {
+    margin-top:5px;
+    margin-left:20px;
+}
+
+
+
+
+
 
 
 

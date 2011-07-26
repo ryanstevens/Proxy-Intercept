@@ -1,12 +1,25 @@
 String.prototype.htmlEncode = function() {
     return this.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 };
-
+//only record the first session
+var sessionId = null; 
 var handlers = {
     onInit : function(res) {
-        console.log('inited');    
+        console.log('inited');
+        if (!sessionId) {
+            sessionId = res.sessionId;
+            socket.json.send({handler: 'fetchIntercepts', payload : {}});
+        }
+
     },
-    
+
+    onLoadIntercepts : function(interceptModels) {
+
+        _.each(interceptModels, function(model) {
+            intercepts.add(new ProxyMessage(model));
+        });
+    },
+
     onLog : function(res) {
         logs.add(new LogMessage(res));
     },
@@ -18,8 +31,24 @@ var handlers = {
         proxies.add(new ProxyMessage(res));
     },
 
+    onAlert : function(res) {
+        alert(res);
+    },
+
+    onIntercept : function(res) {
+        InterceptFunctions.trigger(res);
+    },
+
     onUpdateData : function(res) {
         proxies.get(res.id).set(res);
+    },
+
+    onUpdateIntercept : function(res) {
+        var intercept = intercepts.get(res.id);
+        if (intercept) 
+            intercepts.set(res);
+        else
+            intercepts.add(res);
     }
 };
 

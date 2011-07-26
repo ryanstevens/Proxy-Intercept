@@ -6,6 +6,10 @@
         "proxy",
         "intercept"
     ],
+    "dependencies": {
+        "underscore": "1.1.7",
+        "backbone": "0.5.1"
+    },
     "author": "Ryan Stevens"
 }
 

@@ -37,6 +37,31 @@ _.reIdArr = function(arr) {
     return arr;
 };
 
+var flattenObj = function(obj, parent, returnObj) {
+        if (!returnObj) {
+            returnObj = {};
+        }
+        if (!parent)
+            parent = '';
+        var prefix = parent+ ((parent.length >0) ? '.' : '' );
+        for (var i in obj) {
+            if (obj[i] instanceof Array) {
+                for (var j=0; j<obj[i].length;j++) {
+                    var idx='['+j+']';
+                    if (typeof obj[i][j] === 'object' || (obj[i][j] instanceof Array))
+                        flattenObj(obj[i][j], prefix+i+idx, returnObj);
+                    else
+                        returnObj[prefix+i+idx] = obj[i][j];
+                }
+            } 
+            else if (typeof obj[i] === 'object') 
+                flattenObj(obj[i], prefix +i, returnObj);
+            else
+                returnObj[prefix+i] = obj[i];
+        }   
+        return returnObj;
+    }
+
 var CommandCollection = function(options) {
 
     this.options = options || {};

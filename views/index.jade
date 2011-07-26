@@ -7,7 +7,7 @@
         li
             div#console Console
         li
-            div#inercept Intercepts
+            div#intercept Intercepts
 #content
     div#proxyView
         div#proxyControls
@@ -29,6 +29,9 @@
                             span.headerKeys {{key}} 
                             span.headerValues {{value}}
                         {{/requestHeadersArr}}
+                        div 
+                            span.headerKeys &nbps;
+                            span.reqBtn.headerValues.copyIntercept Intercept!
                     div.responseHeaders
                         {{#responseHeadersArr}}
                         div
@@ -39,6 +42,42 @@
                     br(style='clear:both')
     div#consoleView
     div#interceptView
+        div#interceptList 
+            div#tmpl-intercept.interceptItem
+                div.title {{url}}
+                div.regex {{regex}}
+        div#interceptDetail 
+            div#tmpl-interceptDetail(style='display:none')
+                div.requestConrols
+                    span.reqBtn.selected(cmd='intercept') Intercept
+                    span.reqBtn(cmd='requestHeaders') Request Headers
+                    span.reqBtn(cmd='responseHeaders') Response Headers
+                    span.reqBtn(cmd='responseData') Response Data
+                div.intercept
+                    div.url {{url}}
+                    input.regexInput
+                    span.reqBtn.save Save
+                    div.code
+                        div function intercept(url, requestHeaders, responseHeaders, data) {
+                        div.func var resObj = { headers : responseHeaders, responseText : data };
+                        textarea.func(rows=20,cols=60)
+                        div.func return resObj;
+                        div };
+                div.requestHeaders(style='display:none')
+                    {{#requestHeadersArr}}
+                    div
+                        span.headerKeys {{key}}
+                        span.headerValues {{value}}
+                    {{/requestHeadersArr}}
+                div.responseHeaders
+                    {{#responseHeadersArr}}
+                    div
+                        span.headerKeys {{key}}
+                        span.headerValues {{value}}
+                    {{/responseHeadersArr}}
+                div.responseData
+                br(style='clear:both')
+ 
 script(type='text/javascript')
     var proxyControls = new ProxyControls({el : $('#header')});
     connect();
