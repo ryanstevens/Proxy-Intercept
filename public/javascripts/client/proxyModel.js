@@ -33,6 +33,7 @@ var LogView = Backbone.View.extend({
     initialize : function() {
         this.collection.bind('add', this.add.bind(this));
     },
+
     add : function(logMsg) {
         $(this.el).prepend('<div>'+logMsg.get('msg')+'</div>');
     }

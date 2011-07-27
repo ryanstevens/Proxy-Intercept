@@ -7,9 +7,16 @@
         "intercept"
     ],
     "dependencies": {
-        "underscore": "1.1.7",
-        "backbone": "0.5.1"
+        "underscore": "= 1.1.7",
+        "backbone": "= 0.5.1", 
+        "gzip" : "= 0.1.0",
+        "express" : "= 2.4.3",
+        "jade" : "= 0.13.0",
+        "socket.io" : "= 0.7.7",
+        "compress" : "= 0.1.9",
+        "v8-profiler" : "= 0.0.3"
     },
+    "engine": "node 0.4.7",
     "author": "Ryan Stevens"
 }
 
