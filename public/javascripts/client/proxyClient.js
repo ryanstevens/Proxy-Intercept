@@ -8,7 +8,7 @@ var handlers = {
         console.log('inited');
         if (!sessionId) {
             sessionId = res.sessionId;
- //           socket.json.send({handler: 'fetchIntercepts', payload : {}});
+            socket.json.send({handler: 'fetchIntercepts', payload : {}});
         }
 
     },

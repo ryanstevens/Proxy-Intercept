@@ -12,7 +12,7 @@ var port = 8080;
 
 var app = express.createServer();
 app.set('view engine', 'jade');
-app.set('log level', 5);
+app.set('log level', 1);
 app.use(express.static(__dirname + '/public'));
 app.get('/', function(req, res){
     res.render('index.jade', { pageTitle: 'My Site' });
@@ -20,10 +20,9 @@ app.get('/', function(req, res){
 app.listen(80);
 
 var socket = io.listen(app);
-socket.set('log level', 0);
-socket.configure('development', function(){
-      io.set('transports', ['websocket']);
-});
+socket.set('log level', 1);
+//for some reason webkit doesn't work with websockets in EC2....
+socket.set('transports', ['xhr-polling']);
 
 var transport = clientTransport.getInstance(socket);
 var ProxyServer = proxy.createServer(transport);
